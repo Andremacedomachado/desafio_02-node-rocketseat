@@ -5,10 +5,9 @@ import { randomUUID } from "node:crypto";
 
 export function deitRoutes(app: FastifyInstance) {
   app.get("/", async (req, reply) => {
-    const schema = await knex("diets").columnInfo();
-    return reply
-      .status(200)
-      .send({ message: "server responding correctly", schema });
+    const diets = await knex("diets").select("*");
+
+    return reply.status(200).send({ diets });
   });
 
   app.post("/", async (req, reply) => {
