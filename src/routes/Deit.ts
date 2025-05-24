@@ -10,6 +10,19 @@ export function deitRoutes(app: FastifyInstance) {
     return reply.status(200).send({ diets });
   });
 
+  app.get("/:id", async (req, reply) => {
+    const GetDietRequestParams = z.object({
+      id: z.string(),
+    });
+
+    const { id } = GetDietRequestParams.parse(req.params);
+    const [diet] = await knex("diets").select("*").where({
+      id,
+    });
+
+    return reply.status(200).send({ diets: diet ?? {} });
+  });
+
   app.post("/", async (req, reply) => {
     const DietRequestSchema = z.object({
       name: z.string(),
